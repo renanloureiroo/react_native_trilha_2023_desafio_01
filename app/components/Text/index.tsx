@@ -19,7 +19,7 @@ export interface TextProps extends RNTextProps {
 
 export const Text: React.FC<TextProps> = ({ children, ...props }) => {
   const {
-    color = "gray-700",
+    color = "gray-100",
     size = "medium",
     weight = "regular",
     style: overrideStyles,
@@ -38,7 +38,7 @@ export const Text: React.FC<TextProps> = ({ children, ...props }) => {
   };
 
   return (
-    <RNText style={$styles(color, size, weight)} {...props}>
+    <RNText testID="text" style={$styles(color, size, weight)} {...props}>
       {children}
     </RNText>
   );
