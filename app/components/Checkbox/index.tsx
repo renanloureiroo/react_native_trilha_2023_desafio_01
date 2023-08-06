@@ -32,7 +32,15 @@ export const Checkbox: FC<CheckboxProps> = (props) => {
     $overrideStyles,
   ] as StyleProp<ViewStyle>;
 
-  return <Icon onPress={onPress} size={12} icon={CheckSVG} style={$styles} />;
+  return (
+    <Icon
+      onPress={onPress}
+      color={checked ? "gray-100" : "transparent"}
+      size={12}
+      icon={CheckSVG}
+      style={$styles}
+    />
+  );
 };
 
 const $root: ViewStyle = {
