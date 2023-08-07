@@ -16,6 +16,7 @@ interface IColors {
   "gray-600": string;
   "gray-700": string;
   "danger-100": string;
+  transparent: string;
 }
 
 export const colors: IColors = {
@@ -34,6 +35,8 @@ export const colors: IColors = {
   "gray-700": "#0D0D0D",
 
   "danger-100": "#E25858",
+
+  transparent: "transparent",
 };
 
 export type ColorsType = keyof typeof colors;

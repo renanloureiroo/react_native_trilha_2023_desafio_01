@@ -1,7 +1,7 @@
 import React, {
   ForwardRefRenderFunction,
   forwardRef,
-  useEffect,
+  useCallback,
   useImperativeHandle,
   useRef,
   useState,
@@ -18,12 +18,19 @@ import {
 
 import { useTheme } from "../../shared/theme";
 import { ColorsType } from "../../shared/theme/colors";
+import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 
-const { fontSizes, colors, typography } = useTheme();
+const { fontSizes, colors } = useTheme();
 
-interface InputProps extends Omit<TextInputProps, "placeholderTextColor"> {
+interface InputProps
+  extends Omit<
+    TextInputProps,
+    "placeholderTextColor" | "cursorColor" | "selectionColor"
+  > {
   inputStyle?: StyleProp<TextStyle>;
   placeholderTextColor?: ColorsType;
+  cursorColor?: ColorsType;
+  selectionColor?: ColorsType;
 }
 
 const Base: ForwardRefRenderFunction<TextInput, InputProps> = (props, ref) => {
@@ -32,50 +39,64 @@ const Base: ForwardRefRenderFunction<TextInput, InputProps> = (props, ref) => {
     inputStyle: $overrideInputStyles,
     placeholderTextColor = "gray-300",
     autoFocus,
+    cursorColor = colors["secondary-100"],
+    selectionColor = colors["secondary-100"],
+    ...rest
   } = props;
-  const [focused, setFocused] = useState<boolean>(false);
+  const [isFocused, setIsFocused] = useState<boolean>(false);
   const inputRef = useRef<TextInput>(null);
+  const focused = useIsFocused();
 
-  const handlePressWrapper = () => {
+  const disabled = rest.editable === false;
+
+  const focusInput = () => {
+    if (disabled) return;
+
     inputRef.current?.focus();
   };
+  const handlePressWrapper = () => {
+    focusInput();
+  };
 
-  useEffect(() => {
-    setFocused(inputRef.current?.isFocused() ?? false);
-  }, [inputRef.current]);
+  useFocusEffect(
+    useCallback(() => {
+      if (focused && autoFocus) {
+        setTimeout(function () {
+          focusInput();
+        }, 100);
+      }
+    }, [focused, autoFocus])
+  );
 
-  useEffect(() => {
-    let timeout: NodeJS.Timeout | null = null;
-    if (autoFocus) {
-      timeout = setTimeout(() => {
-        inputRef.current?.focus();
-      }, 100);
-    }
-
-    return () => {
-      if (timeout) clearTimeout(timeout);
-    };
-  }, [autoFocus]);
-
-  useImperativeHandle(ref, () => inputRef.current!, []);
+  useImperativeHandle(ref, () => inputRef.current!);
 
   const $inputStyles = [$input, $overrideInputStyles] as StyleProp<TextStyle>;
   const $styles = () => {
     return [
       $root,
-      focused && { borderWidth: 1, borderColor: colors["secondary-200"] },
+      isFocused && { borderWidth: 1, borderColor: colors["secondary-100"] },
       $overrideStyles,
     ] as StyleProp<ViewStyle>;
   };
 
   return (
-    <Pressable onPress={handlePressWrapper} style={$styles()}>
+    <Pressable
+      testID="input-wrapper"
+      onPress={handlePressWrapper}
+      style={$styles()}
+    >
       {({ pressed }) => (
         <TextInput
-          ref={ref}
-          {...props}
+          testID="input"
+          ref={inputRef}
+          textAlignVertical="center"
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          {...rest}
           style={$inputStyles}
           placeholderTextColor={colors[placeholderTextColor]}
+          cursorColor={cursorColor}
+          selectionColor={selectionColor}
         />
       )}
     </Pressable>
@@ -86,19 +107,20 @@ export const Input = forwardRef(Base);
 
 const $root: ViewStyle = {
   width: "100%",
-  borderRadius: 8,
-  paddingHorizontal: 16,
-  paddingVertical: 16,
-  minHeight: 48,
-  backgroundColor: colors["gray-500"],
   flexDirection: "row",
   alignItems: "center",
   justifyContent: "space-between",
+  backgroundColor: colors["gray-500"],
+  borderRadius: 8,
 };
 
 const $input: TextStyle = {
   fontSize: fontSizes["medium"],
-  lineHeight: fontSizes["medium"] * 1.4,
+  backgroundColor: "transparent",
   color: colors["gray-100"],
   flex: 1,
+  textAlignVertical: "center",
+  minHeight: 48,
+  paddingHorizontal: 16,
+  paddingVertical: 16,
 };

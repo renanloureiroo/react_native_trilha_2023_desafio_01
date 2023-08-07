@@ -10,5 +10,8 @@
     "!**/node_modules/**",
     "!**/babel.config.js",
     "!**/jest.setup.js"
-  ]
+  ],
+  "moduleNameMapper": {
+    "\\.svg": "<rootDir>/__mocks__/svgMock.js"
+  }
 }

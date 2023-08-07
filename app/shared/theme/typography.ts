@@ -1,17 +1,7 @@
-import {
-  Inter_400Regular as interRegular,
-  Inter_700Bold as interBold,
-} from "@expo-google-fonts/inter";
-
-export const fontsToLoad = {
-  interRegular,
-  interBold,
-};
-
 const fonts = {
   inter: {
-    regular: "interRegular",
-    bold: "interBold",
+    regular: "Inter_400Regular",
+    bold: "Inter_700Bold",
   },
 };
 
