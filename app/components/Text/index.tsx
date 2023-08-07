@@ -3,6 +3,7 @@ import {
   Text as RNText,
   TextProps as RNTextProps,
   StyleProp,
+  TextStyle,
 } from "react-native";
 
 import { useTheme } from "../../shared/theme";
@@ -22,7 +23,7 @@ export const Text: React.FC<TextProps> = ({ children, ...props }) => {
     color = "gray-100",
     size = "medium",
     weight = "regular",
-    style: overrideStyles,
+    style: $overrideStyles,
   } = props;
 
   const $styles = (color: ColorsType, size: SizeType, weight: WeightType) => {
@@ -33,12 +34,12 @@ export const Text: React.FC<TextProps> = ({ children, ...props }) => {
         fontFamily: typography.primary[weight],
         lineHeight: fontSizes[size] * 1.4,
       },
-      overrideStyles,
-    ] as StyleProp<RNTextProps>;
+      $overrideStyles,
+    ] as StyleProp<TextStyle>;
   };
 
   return (
-    <RNText testID="text" style={$styles(color, size, weight)} {...props}>
+    <RNText testID="text" {...props} style={$styles(color, size, weight)}>
       {children}
     </RNText>
   );

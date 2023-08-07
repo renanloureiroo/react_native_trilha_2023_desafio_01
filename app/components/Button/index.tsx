@@ -15,6 +15,7 @@ type SizeType = "small" | "medium";
 
 interface ButtonProps extends PressableProps {
   size?: SizeType;
+  iconSize?: number;
   icon: React.FC<SvgProps>;
   pressedStyles?: StyleProp<ViewStyle>;
   iconPressedColor?: ColorsType;
@@ -24,17 +25,20 @@ interface ButtonProps extends PressableProps {
 export const Button: FC<ButtonProps> = (props) => {
   const {
     size = "medium",
+    iconSize = 24,
     onPress,
     icon,
     pressedStyles: $overridePressedStyles,
     iconPressedColor = "secondary-200",
     iconColor = "secondary-100",
+    style: $overrideStyles,
   } = props;
 
   const $styles = ({ pressed, size }: { pressed: boolean; size: SizeType }) => {
     return [
       $root,
       size === "small" ? $small : $medium,
+      $overrideStyles,
       pressed && $overridePressedStyles,
     ] as StyleProp<ViewStyle>;
   };
@@ -44,7 +48,7 @@ export const Button: FC<ButtonProps> = (props) => {
       {({ pressed }) => (
         <Icon
           icon={icon}
-          size={size === "small" ? 32 : 52}
+          size={iconSize}
           color={pressed ? iconPressedColor : iconColor}
           style={$styles({ pressed, size })}
         />

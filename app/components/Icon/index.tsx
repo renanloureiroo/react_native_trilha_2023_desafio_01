@@ -27,6 +27,8 @@ export const Icon: FC<IconProps> = (props) => {
     color = "secondary-100",
     style: $overrideStyle,
     size = 24,
+    width,
+    height,
     ...rest
   } = props;
 
@@ -39,8 +41,8 @@ export const Icon: FC<IconProps> = (props) => {
     return (
       <TouchableOpacity style={$styles} onPress={onPress} activeOpacity={0.7}>
         <IconComponent
-          width={size}
-          height={size}
+          width={width ?? size}
+          height={height ?? size}
           color={colors[color]}
           {...rest}
         />
