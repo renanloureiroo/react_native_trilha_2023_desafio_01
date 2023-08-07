@@ -56,7 +56,6 @@ export const Icon: FC<IconProps> = (props) => {
         color={colors[color]}
         {...rest}
       />
-      ;
     </View>
   );
 };

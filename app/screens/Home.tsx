@@ -4,6 +4,9 @@ import { Input } from "../components/Input";
 import { useState } from "react";
 import { colors } from "../shared/theme/colors";
 import { Checkbox } from "../components/Checkbox";
+import { Button } from "../components/Button";
+
+import TrashSVG from "../../assets/svgs/trash.svg";
 
 export const Home = () => {
   const [value, setValue] = useState<string>("");
@@ -26,6 +29,17 @@ export const Home = () => {
       />
 
       <Checkbox checked={checked} onPress={handlePressCheckbox} />
+
+      <Button
+        icon={TrashSVG}
+        size="small"
+        onPress={() => {
+          console.log("Pressed");
+        }}
+        iconColor="gray-300"
+        pressedStyles={styles.pressedStyles}
+        iconPressedColor="danger-100"
+      />
     </View>
   );
 };
@@ -41,5 +55,9 @@ const styles = StyleSheet.create({
 
   input: {
     marginBottom: 16,
+  },
+
+  pressedStyles: {
+    backgroundColor: colors["gray-400"],
   },
 });
