@@ -204,6 +204,7 @@ export const Home = () => {
 const $root: ViewStyle = {
   flex: 1,
   backgroundColor: colors["gray-600"],
+  position: "relative",
 };
 
 const $header: ViewStyle = {
